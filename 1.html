@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0px;padding: 0px;}
+        ul,.content{
+            border-top: 1px solid darkgrey;
+            border-left: 1px solid darkgrey;
+        }
+        ul li{
+            display: block;
+            width: 25%;
+            box-sizing: border-box;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-bottom: 1px solid darkgrey;
+            border-right: 1px solid darkgrey;
+            float: left;
+            font-size: 14px;
+        }
+        .content>div{
+            width: 50%;
+            box-sizing: border-box;
+            height:600px;
+            border-bottom: 1px solid darkgrey;
+            border-right: 1px solid darkgrey;
+            float: left;
+        }
+        @media screen and (min-width:460px){
+            ul li{
+                height: 70px;
+                line-height: 70px;
+                font-size: 1.5em;
+            }
+            .content>div{
+                height:400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <ul class="header">
+        <li>良品购</li>
+        <li>特实惠</li>
+        <li>美食菜谱</li>
+        <li>家居生活</li>
+        <li>壁纸</li>
+        <li>头像</li>
+        <li>表情</li>
+        <li>更多分类</li>
+    </ul>
+    <div class="content">
+        <div></div>
+        <div></div>
+    </div>
+</body>
+</html>
