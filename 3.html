@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="jquery-1.11.2.min.js"></script>
+</head>
+<body>
+    <p>3,10,45,6,7,8,9,9,6,5,42,54,6,5,76,7,54,45,45,67,67,4,100,7,32,20,42,84,81,22</p>
+    <div>
+        <lable>第十六个元素：</lable>
+        <span>16</span>
+    </div>
+    <input id="delete" type="button" value="随机删除一个元素"/>
+</body>
+<script>
+    $(document).ready(function(){
+        //数组转obj
+        var _dataStr = $('p').text();
+        var _dataArr = _dataStr.split(',');
+        var _dataObj = [];
+        for(var index=0; index < _dataArr.length; index++) {
+            _dataObj.push({'index': index, 'number': _dataArr[index]});
+        }
+        //随机删除方法
+        $('#delete').click(function(){
+            //获得本次删除的数的下标并删除
+            var _i = getRandom(_dataObj.length)-1;
+            var _resultStr = "";
+            _dataObj.splice(_i,1);
+            //获取现有元素的字符串并显示
+            for(var index=0; index<_dataObj.length; index++) {
+                _resultStr += _dataObj[index].number + ","
+            }
+            _resultStr = _resultStr.substr(0, _resultStr.length - 1);
+            $('p').text(_resultStr);
+            //显示现在的第16个元素，是之前的第几个
+            if(_dataObj.length < 16) {
+                $('span').text("没有第16个元素");
+            }
+            else {
+                $('span').text(_dataObj[15].index + 1);
+            }
+        });
+    });
+    //随机函数，0-n之间任意数
+    function getRandom(n){
+        return Math.floor(Math.random()*n+1);
+    }
+</script>
+</html>

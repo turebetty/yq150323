@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="jquery-1.11.2.min.js"></script>
+</head>
+<body>
+<div class="flow">
+    <ul class="flow_ul"></ul>
+</div>
+</body>
+<script>
+    /**
+     * jq的瀑布流插件
+     * 参数：columnCount（几列）columnWidth（列宽）columnMarginTop（每个li的margintop）columnMarginLeft（每个li的marginleft）
+     * **/
+    (function($) {
+        var options = {
+            'columnWidth':0,
+            'columnCount':0,
+            'columnMarginTop':0,
+            'columnMarginLeft':0
+        };
+        var othis;
+        //初始化方法
+        init = function(){
+            var windowWidth = $(window).width();
+            var marginLeft =  options.columnMarginLeft;
+            var wrapperLeft = (windowWidth - (options.columnCount*(options.columnWidth + options.columnMarginLeft*2)) )/2;
+            //重新计算li的大小位置
+            othis.find('li').each(function(){
+                var _this = $(this);
+                var _index = $(this).index();
+                var _left = Math.floor(_index%options.columnCount)*(options.columnWidth+marginLeft*2)+marginLeft+wrapperLeft;
+                var _topIndex = _index-options.columnCount;
+                var _topLi = othis.find('li:eq('+_topIndex+')');
+                var _top = _topLi.position().top + _topLi.height() + options.columnMarginTop*2;
+                if(_index < options.columnCount) {
+                    _top = options.columnMarginTop;
+                }
+                _this.css({
+                    'display':'inline-block',
+                    'width':options.columnWidth,
+                    'position':'absolute',
+                    'left':_left,
+                    'top':_top
+                });
+            })
+        };
+        //定义函数
+        $.fn.waterFlow = function(options_) {
+            return this.each(function() {
+                othis = $(this);
+                options = options_;
+                init();
+            });
+        };
+    })(jQuery);
+    $(document).ready(function(){
+        //填充ul，并给li随机的高度，颜色
+        for(var i=0, j=24; i<j; i++){
+            var R = getRandom(255,0);
+            var G = getRandom(255,0);
+            var B = getRandom(255,0);
+            $('<li></li>').height(getRandom(300,100)+'px').width(200+'px').appendTo('.flow_ul').css('backgroundColor','rgb('+R+','+G+','+B+')');
+        }
+        //以瀑布流形式展现
+        $('.flow_ul').waterFlow({'columnWidth':200,'columnCount':4,'columnMarginTop':10,'columnMarginLeft':10});
+    });
+    //随机获取max和min之间的任意数值
+    function getRandom(max_,min_){
+        return parseInt(Math.random()*(max_-min_+1)+min_);
+    }
+</script>
+</html>

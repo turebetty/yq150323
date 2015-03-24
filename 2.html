@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="jquery-1.11.2.min.js"></script>
+    <style>
+        #form1>div{
+            height: 30px;
+            margin:20px;
+        }
+        #form1 lable{
+            width:5%;
+            height: 30px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" action="./2.html">
+        <div>
+            <lable>input:</lable>
+            <input type="text" name="input" value="1"/>
+        </div>
+        <div>
+            <lable>textarea:</lable>
+            <textarea  name="textarea">3</textarea>
+        </div>
+        <div>
+            <lable>select:</lable>
+            <select name="select">
+                <option value ="a">a</option>
+                <option value ="b">b</option>
+                <option value="c">c</option>
+                <option value="d">d</option>
+            </select>
+        </div>
+        <div>
+            <lable>submit:</lable>
+            <input type="button" id="submit" value="Ajax提交"/>
+        </div>
+        <div>
+            <label>result:</label>
+            <span id="result"></span>
+        </div>
+    </form>
+</body>
+<script>
+/** formSubmit插件
+    调用方式为 $("selector").formSubmit(callBackFun_）**/
+    (function($) {
+        //form表单中需要提交的数据，为键值对形式
+        var data = {};
+        //回调函数
+        var callBackFunc = null;
+        //初始化函数
+        init = function(obj_){
+            getInputVal(obj_);
+            getTextareaVal(obj_);
+            getSelectVal(obj_);
+            submit(obj_);
+            //console.log(data);
+        };
+        getInputVal = function(obj_){
+            obj_.find('input').each(function(){
+                var _this = $(this);
+                if(_this.attr('name') && _this.val()){
+                    push(_this.attr('name'),_this.val());
+                }
+            })
+        };
+        getTextareaVal = function(obj_){
+            obj_.find('textarea').each(function(){
+                var _this = $(this);
+                if(_this.attr('name') && _this.val()){
+                    push(_this.attr('name'),_this.val());
+                }
+            })
+        };
+        getSelectVal = function(obj_){
+            obj_.find('select').each(function(){
+                var _this = $(this);
+                if(_this.attr('name') && _this.val()){
+                    push(_this.attr('name'),_this.val());
+                }
+            })
+        };
+        //将键值对存入数组
+        push = function(key_,val_){
+           data[key_] = val_;
+        };
+        //用ajax提交表单数据，并返回
+        submit = function(obj_){
+            var _url = obj_.attr('action');
+            $.ajax({
+                url:_url ,
+                type:'post',
+                dataType:'json',
+                data: data,
+                complete: function(r_){
+                    if(typeof(callBackFunc) == 'function') {
+                        callBackFunc(data);
+                    }
+                }
+            });
+        };
+        //定义插件
+        $.fn.formSubmit = function(callBackFunc_) {
+            return this.each(function() {
+                var _this = $(this);
+                callBackFunc = callBackFunc_;
+                init(_this);
+            });
+        };
+    })(jQuery);
+    $(document).ready(function(){
+        //点击提交按钮，调用插件
+        $("#submit").click(function() {
+            $("#form1").formSubmit(function(data) {
+                //回调，显示所有form表单数据
+                $("#result").text(JSON.stringify(data));
+            });
+        });
+    });
+</script>
+</html>
